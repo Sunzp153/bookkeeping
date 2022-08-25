@@ -1,0 +1,58 @@
+$leftColor: blue;
+$listHeight: 40px;
+html, body, #root, .App {
+  height: 100%;
+  width: 100%;
+}
+
+.Home {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  min-width: 800px;
+  .Home-left {
+    color: #fff;
+    background-color: $leftColor;
+    width: 200px;
+    * > a{
+      display: inline-block;
+      line-height: 100%;
+    }
+    .title {
+      height: 15%;
+      padding-top: 20px;
+      padding-left: 20px;
+      span {
+        display: inline-block;
+        font-size: 20px;
+      }
+    }
+    .Bill, .Stats{
+      height: $listHeight;
+      > a {
+        height: $listHeight;
+        width: 100%;
+        color: #fff;
+        &.active {
+          background-color: #fff;
+          color: $leftColor;
+        }
+        span {
+          display: inline-block;
+          height: $listHeight;
+          line-height: $listHeight;
+          padding-left: 30%;
+        }
+      }
+    }
+  }
+  .Home-right {
+    flex: 1;
+    .top {
+      height: 15%;
+      background-color: red;
+      width: 100%;
+    }
+  }
+
+}
