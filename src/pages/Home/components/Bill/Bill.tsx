@@ -1,10 +1,7 @@
-import { SetStateAction, useEffect, useRef, useState } from "react"
-import {Table, DatePicker, Space, Select, Button, Modal, Form, Input, InputNumber} from 'antd';
+import { useEffect, useRef, useState } from "react"
+import {Table, Space, Select, Button, Modal, Form} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import {nanoid} from 'nanoid';
-import type { DatePickerProps } from 'antd';
 import 'moment/locale/zh-cn';
-import locale from 'antd/es/date-picker/locale/zh_CN';
 import moment from "moment";
 import {NewAccount} from "../../../../components/NewAccount/NewAccount";
 import './Bill.scss';
@@ -58,29 +55,9 @@ export default function Bill() {
   })
   const [isCreateVisible, setIsCreateVisible] = useState(false);
 
-  const showCreate = () => {
-    setIsCreateVisible(true);
-  };
 
-  const handleSubmit = () => {
-    setIsCreateVisible(false);
-  };
-  const handleCancel = () => {
-    setIsCreateVisible(false);
-  };
   const [isReviseVisible, setIsReviseVisible] = useState(-1);
   const [isDeleteVisible, setIsDeleteVisible] = useState(-1);
-  const showRevise = (idx: number) => {
-    setIsReviseVisible(idx);
-  };
-  const handleReviseOk = (idx: number) => {
-    console.log('修改ok')
-    setIsReviseVisible(-1);
-  };
-  const handleReviseCancel = () => {
-    console.log('不改了')
-    setIsReviseVisible(-1);
-  };
   const showDelete = (idx: number) => {
     setIsDeleteVisible(idx);
   };
