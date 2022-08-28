@@ -1,4 +1,4 @@
-import { SetStateAction, useRef, useState } from "react"
+import { SetStateAction, useEffect, useRef, useState } from "react"
 import {Table, DatePicker, Space, Select, Button, Modal, Form, Input, InputNumber} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {nanoid} from 'nanoid';
@@ -7,15 +7,20 @@ import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import moment from "moment";
 import {NewAccount} from "../../../../components/NewAccount/NewAccount";
+import './Bill.scss';
+import {produce} from 'immer';
+
 
 const {Option} = Select;
-interface billType{
+export interface billType{
   date: string,
   amount: string,
   classification: '早餐' | '电子' | '工资' | '理财' | '其他'| '衣物'  ,
   remark: string,
   oldDate?: string,
   id: string,
+  idx?: any,
+  type?: boolean,
 }
 
 
@@ -28,12 +33,17 @@ export default function Bill() {
   const saveBill = (bill: billType[]) => {
     localStorage.bill = JSON.stringify(bill)
   }
+  useEffect(()=> {
+    saveBill(bill)
+  }, [bill])
+
+
 
   const onClassFilter = (value: string) => {
     console.log(`selected ${value}`);
   };
   //筛选列表
-  const billFilter = bill.filter((it, idx) => {
+  const billFilter = bill.map((it, idx) => { return {...it, idx}}).filter((it, idx) => {
     const {month, classification} = filter
     if(classification != undefined && classification != '' && classification != bill[idx].classification) {
       return false
@@ -75,6 +85,9 @@ export default function Bill() {
     setIsDeleteVisible(idx);
   };
   const handleDeleteOk = (idx: number) => {
+    setBill(produce((oldBill) => {
+      oldBill.splice(billFilter[idx].idx, 1)
+    }))
     setIsDeleteVisible(-1);
   };
   const handleDeleteCancel = () => {
@@ -127,20 +140,13 @@ export default function Bill() {
       render: (_, record, idx) => (
         <Space key={record.id} size="middle">
           <div className="revise">
-            <Button type="primary" onClick={() => showRevise(idx)}>
-              修改
-            </Button>
-            <Modal title="Basic Revise" visible={isReviseVisible == idx} onOk={() => handleReviseOk(idx)} onCancel={handleReviseCancel}>
-              <div>
-                xiugai
-              </div>
-            </Modal>
+            <NewAccount bill={billFilter}  revise={idx} setBill={setBill}></NewAccount>
           </div>
           <div className="delete">
           <Button type="primary" onClick={ () => showDelete(idx)}>
               删除
             </Button>
-            <Modal title="Basic Revise" visible={isDeleteVisible == idx} onOk={() => handleDeleteOk(idx)} onCancel={() => handleDeleteCancel}>
+            <Modal visible={isDeleteVisible == idx} onOk={() => handleDeleteOk(idx)} onCancel={() => handleDeleteCancel}>
               <div>
                 确定删除吗
               </div>
@@ -184,14 +190,14 @@ export default function Bill() {
             </Select>
           </Form.Item>
           <Button type="primary" onClick={onInquire}>查询</Button>
-          <Button onClick={onEmpty}>清空</Button>
+          <Button onClick={onEmpty}>重置</Button>
         </Form>
       </div>
       <div className="create">
-          <NewAccount bill={bill} setBill={setBill} ></NewAccount>
+        <NewAccount bill={bill} setBill={setBill} ></NewAccount>
       </div>
-      <div className="items" style={{height:'10px'}}>
-        <Table size='small'  columns={billCol} dataSource={billFilter} />;
+      <div className="items" >
+        <Table footer={(e) => <div>共{e.length}项数据</div>} size='small'  columns={billCol} dataSource={billFilter} />
       </div>
     </div>
   )

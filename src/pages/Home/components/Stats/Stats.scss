@@ -1,0 +1,22 @@
+
+
+.Stats {
+  width: 100%;
+  .date {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  .charts {
+    padding: 20px;
+    width: 100%;
+    .doughnut {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      > * {
+        margin-top: 100px;
+      }
+    }
+  }
+}

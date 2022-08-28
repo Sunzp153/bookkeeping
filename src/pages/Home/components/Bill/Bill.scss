@@ -1,0 +1,21 @@
+// @import '~antd/dist/antd.css';
+
+
+
+.Bill {
+  padding: 10px 5%;
+  .filter {
+    form.ant-form {
+      display: flex;
+      width: 450px;
+      justify-content: space-between;
+    }
+  }
+  .create {
+    margin: 10px 0 30px 0;
+  }
+  .items {
+    border: 1px solid rgb(222, 202, 202);
+  }
+
+}
